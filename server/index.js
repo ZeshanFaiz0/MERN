@@ -3,12 +3,12 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-import multer from "multer";
 import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 import { register } from "./controllers/auth.js";
+import { uploadFile } from "./middleware/uploadFile.js";
 
 /* CONFIGURATIONS */
 
@@ -46,24 +46,12 @@ app.use(cors());
 // Setting Directory to keep assets
 app.use("/assets", express.static(path.join(__dirname, 'public/assets')));
 
-
-/* FILE STORAGE */
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'public/assets');
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.originalname);
-    }
-});
-const upload = multer({storage: storage});
-
 /* ROUTES WITH FILES */
-app.post("/auth/register", upload.single("picture"), register);
+app.post("/auth/register", uploadFile, register);
 
 /* MONGOOSE SETUP */
 const port = process.env.PORT || 3001;
-mongoose.connect(process.env.MONGO_URL || "mongodb+srv://zeshanfa:zeshanfa123@cluster0.jvdzqqh.mongodb.net/?retryWrites=true&w=majority" , {
+mongoose.connect(process.env.MONGO_URL , {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => {

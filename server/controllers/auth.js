@@ -17,7 +17,7 @@ export const register = async (req, res) => {
             occupation
         } = req?.body;
         if(!picturePath){
-            picturePath = (process.env.PIC_PATH || "../../public/assets/") + picture
+            picturePath = (process.env.PIC_PATH ) + picture
         }
         const salt = await bcrypt.genSalt();
         const passHash = await bcrypt.hash(password, salt);
