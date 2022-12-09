@@ -10,14 +10,13 @@ export const register = async (req, res) => {
             lastName,
             email,
             password,
-            picture,
             picturePath,
             friends,
             location,
             occupation
         } = req?.body;
         if(!picturePath){
-            picturePath = (process.env.PIC_PATH ) + picture
+            picturePath = (process.env.PIC_PATH );
         }
         const salt = await bcrypt.genSalt();
         const passHash = await bcrypt.hash(password, salt);
