@@ -5,16 +5,7 @@ import User from "../models/User.js"
 /* REGISTER USER */
 export const register = async (req, res) => {
     try {
-        var {
-            firstName,
-            lastName,
-            email,
-            password,
-            picturePath,
-            friends,
-            location,
-            occupation
-        } = req?.body;
+        var {firstName, lastName, email, password, picturePath, friends, location, occupation } = req?.body;
         if(!picturePath){
             picturePath = (process.env.PIC_PATH );
         }
