@@ -7,8 +7,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
-import { register } from "./controllers/auth.js";
-import { uploadFile } from "./middleware/uploadFile.js";
+import authRoutes from "./routes/auth.js"
 
 /* CONFIGURATIONS */
 
@@ -23,6 +22,9 @@ dotenv.config();
 
 // To invoke express app
 const app = express();
+
+// To use cors policy
+app.use(cors());
 
 // To parse requests to json
 app.use(express.json());
@@ -40,17 +42,16 @@ app.use(bodyParser.json({ limit: "30mb", extended: true }));
 // To parse requests to receive multipart/data
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 
-// To use cors policy
-app.use(cors());
 
 // Setting Directory to keep assets
 app.use("/assets", express.static(path.join(__dirname, 'public/assets')));
 
 /* ROUTES WITH FILES */
-app.post("/auth/register", uploadFile, register);
+app.use("/auth", authRoutes);
 
 /* MONGOOSE SETUP */
 const port = process.env.PORT || 3001;
+mongoose.set('strictQuery', false);
 mongoose.connect(process.env.MONGO_URL , {
     useNewUrlParser: true,
     useUnifiedTopology: true,
