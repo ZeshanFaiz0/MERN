@@ -8,7 +8,11 @@ import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js"
-
+import userRoutes from "./routes/user.js"
+import postRoutes from "./routes/posts.js"
+import User from "./models/User.js";
+import Post from "./models/Post.js";
+import {users, posts} from "./data/index.js"
 /* CONFIGURATIONS */
 
 // To grab the file url
@@ -46,9 +50,14 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 // Setting Directory to keep assets
 app.use("/assets", express.static(path.join(__dirname, 'public/assets')));
 
-/* ROUTES WITH FILES */
+/* AUTH ROUTES */
 app.use("/auth", authRoutes);
 
+/* USER ROUTES */
+app.use("/user", userRoutes);
+
+/* POSTS ROUTES */
+app.use("/posts", postRoutes)
 /* MONGOOSE SETUP */
 const port = process.env.PORT || 3001;
 mongoose.set('strictQuery', false);
@@ -57,4 +66,6 @@ mongoose.connect(process.env.MONGO_URL , {
     useUnifiedTopology: true,
 }).then(() => {
     app.listen(port, () => console.log(`Server PORT: http://localhost:${port}`));
+    // User.insertMany(users);
+    // Post.insertMany(posts);
 }).catch((error) => console.log(`${error} did not connect`));

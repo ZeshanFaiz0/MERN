@@ -4,7 +4,7 @@ import path  from "path";
 // Set The Storage Engine
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './../public/assets');
+        cb(null, './public/assets');
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname);
@@ -36,7 +36,7 @@ export const uploadFile = (req, res, next) => {
     if (err) {
       res.json(err);
     }
-     req.body.picturePath = req.file.path;
+     req.body.picturePath = req.file.originalname;
       next();
   });
 };
